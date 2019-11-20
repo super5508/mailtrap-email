@@ -14,7 +14,11 @@ const port = 8001;
 app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(sslRedirect());
-app.use(compression())
+app.use(compression());
+
+app.get('/', (req, res) => {
+  res.send('Email service');
+});
 
 app.get("/email/:mail", (req, res, next) => {
   if(!validator.isEmail(req.params.mail)){
