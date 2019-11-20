@@ -3,13 +3,18 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const validator = require("validator");
 const nodemailer = require("nodemailer");
+const compression = require('compression')
+const path = require('path');
 const app = express();
+const sslRedirect = require('heroku-ssl-redirect');
+var server = require('http').createServer(app);
 const port = 8001;
 
 
 app.use(morgan("dev"));
 app.use(bodyParser.json());
-
+app.use(sslRedirect());
+app.use(compression())
 
 app.get("/email/:mail", (req, res, next) => {
   if(!validator.isEmail(req.params.mail)){
@@ -68,6 +73,6 @@ app.use((err, req, res, next) => {
   })
 })
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Server Running on port:${port}`);
 })
